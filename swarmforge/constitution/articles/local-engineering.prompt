@@ -4,7 +4,7 @@
 
 - Every role except the specifier runs the full suite -- `pytest` (unit and
   acceptance) -- before any handoff, and fixes what it broke.
-- The architect, hardener, and QA additionally run `ruff check .`, `mypy src`,
+- The architect, hardender, and QA additionally run `ruff check .`, `mypy src`,
   and the property tests (`pytest -m property`) when the project has them, and
   fix any failures before handing off.
 - No handoff on a red suite. If you cannot get it green, hand back to the
@@ -23,8 +23,11 @@
 
 ## Test discipline
 
-- Tests are hermetic: no live HTTP, no real sleeps (the rate limiter takes an
-  injectable clock), no dependence on wall-clock time or test ordering.
+- Tests are hermetic: no live HTTP, no real browser launch, no real worker
+  node, no real sleeps (retry backoff takes an injectable clock), no dependence
+  on wall-clock time or test ordering.
+- Playwright and Selenium are faked at the driver boundary. A test that would
+  fail on a machine without those browsers installed is a broken test.
 - New behavior arrives with a test. A bug fix arrives with the test that would
   have caught it.
 - Fixtures live in `fixtures/` and are committed. Do not download a page at test
