@@ -1,0 +1,36 @@
+# Article: Local Engineering
+
+## Verification
+
+- Every role except the specifier runs the full suite -- `pytest` (unit and
+  acceptance) -- before any handoff, and fixes what it broke.
+- The architect, hardener, and QA additionally run `ruff check .`, `mypy src`,
+  and the property tests (`pytest -m property`) when the project has them, and
+  fix any failures before handing off.
+- No handoff on a red suite. If you cannot get it green, hand back to the
+  previous role with the failing test name and the reason -- do not pass a
+  broken slice forward and do not delete or skip a test to make it pass.
+
+## Acceptance scenarios
+
+- Every scenario in `features/` has a step definition in
+  `tests/acceptance/steps/`. An undefined step is a failing build, not a
+  pending test.
+- Never edit a `.feature` file to make a failing scenario pass. If the scenario
+  is wrong, hand it back to the specifier with the scenario name and why.
+- `pytest` runs unit tests and `pytest-bdd` scenarios together. There is one
+  runner; do not add a second.
+
+## Test discipline
+
+- Tests are hermetic: no live HTTP, no real sleeps (the rate limiter takes an
+  injectable clock), no dependence on wall-clock time or test ordering.
+- New behavior arrives with a test. A bug fix arrives with the test that would
+  have caught it.
+- Fixtures live in `fixtures/` and are committed. Do not download a page at test
+  time to create one; save it once, deliberately, and check it in.
+
+## Commits
+
+- Small commits, one logical change each, present-tense subject line.
+- Commit before handing off, so the next role's worktree sees your work.

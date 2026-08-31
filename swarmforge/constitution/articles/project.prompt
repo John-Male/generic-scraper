@@ -1,0 +1,103 @@
+# Article: Project
+
+This project is `generic-scraper`: a reusable, configuration-driven web
+scraping library and CLI written in Python. The point of the project is that a
+user describes a target site in a spec file and gets structured records out,
+without writing Python.
+
+## Swarm
+
+Six roles, all on the `claude` backend (Claude Code), signed in to the user's
+Claude account. Do not switch backends or edit `swarmforge/swarmforge.conf`.
+
+## Layout
+
+```
+swarmforge/              role prompts, constitution, swarm config
+.swarmforge/             swarm state -- never edit by hand
+.worktrees/<role>/       one git worktree per role -- stay in your own
+src/generic_scraper/     library code
+tests/                   unit tests, mirroring the src layout
+tests/acceptance/        end-to-end tests against local fixtures
+fixtures/                saved HTML/JSON pages the tests scrape
+docs/                    usage documentation
+```
+
+## Product intent
+
+A scraper you configure rather than rewrite. Given a spec -- base URL,
+pagination rule, per-field selectors, output shape -- the tool produces
+structured records.
+
+Build in roughly this order:
+
+1. Spec loading and validation. A malformed spec fails fast with a message that
+   names the offending key and what was expected.
+2. A fetch layer over `requests`: timeouts, retry with exponential backoff on
+   5xx and connection errors, and a pluggable transport so tests inject a fake
+   instead of touching the network.
+3. Field extraction by CSS selector (BeautifulSoup + lxml), with optional type
+   coercion (`str`, `int`, `float`, `date`) and a per-field `required` flag.
+4. Pagination strategies: `next-link` (follow a selector), `page-number`
+   (template a query param until empty), and `none`.
+5. Output writers: JSON Lines and CSV.
+6. A CLI: `scrape <spec.yaml> -o out.jsonl`, with `--limit`, `--dry-run`, and
+   sensible exit codes.
+7. Politeness, on by default: per-domain rate limiting and robots.txt respect.
+
+Out of scope unless the user explicitly asks: JavaScript rendering or headless
+browsers, distributed crawling, proxy rotation, captcha handling.
+
+## Acceptance specs (Gherkin)
+
+This project is spec-first. Hand-written `.feature` files are the source of
+truth for behavior and they arrive in the repo before the swarm starts.
+
+- Feature files live in `features/`, one file per capability
+  (`features/spec_loading.feature`, `features/pagination.feature`, ...).
+- Step definitions live in `tests/acceptance/steps/`, run by `pytest-bdd` so
+  there is exactly one test runner for the whole project. `pytest` alone runs
+  everything.
+- Fixtures the scenarios scrape live in `fixtures/`, committed.
+
+The specifier does **not** invent features that already exist in `features/`.
+Its job on an existing file is to review it, normalize it to the project's
+Gherkin conventions, prune example-table columns that do not change behavior,
+consolidate repeated setup into `Background`, flag anything ambiguous or
+untestable back to the user, and only then cut a slice and hand off. New
+features it writes follow the same conventions and land in the same directory.
+
+The coder implements against a scenario; nobody edits a `.feature` file to make
+a failing scenario pass. If a scenario is wrong, hand it back to the specifier
+and say why.
+
+## Engineering constraints
+
+- Python 3.11+. Standard library plus `requests`, `beautifulsoup4`, `lxml`,
+  `PyYAML`, `pytest`. Adding any other dependency needs the architect's
+  agreement first.
+- No network in tests. Ever. Tests run against committed fixtures or an injected
+  fake transport. A test that reaches the live internet is a defect, and the
+  hardener should kill it.
+- Type hints on every public function. `ruff` clean, `mypy src` clean.
+- Public behavior is documented in `docs/` in the same slice that ships it.
+
+## Guardrails
+
+This is a general-purpose tool, not an evasion tool. Do not implement, and do
+not accept a handoff asking for: bypassing captchas or login walls, spoofing to
+defeat bot detection, disabling robots.txt by default, or harvesting personal
+data. If a handoff asks for one of these, refuse it, say why in a note back to
+the specifier, and stop rather than improvising a variant.
+
+## Communication
+
+Handoffs are short and direct: what changed, what remains, what you need from
+the next role. No verification transcripts. No commentary about your own
+process.
+
+## Governance
+
+Each role owns its own prompt and workflow. Do not edit another role's prompt,
+`swarmforge.conf`, or the constitution without explicit authorization from the
+user.
