@@ -7,7 +7,12 @@ user interface is the command-line entry point:
     python -m generic_scraper <command> [options]
 
 QA converts each `qa/NN_*.md` procedure into an executable script that drives
-this CLI and asserts on its **stdout**, **stderr**, and **exit code**.
+this CLI and asserts on its **stdout**, **stderr**, and **exit code**. Those
+scripts live in `tests/e2e/`, one `test_qa_NN_*.py` module per procedure file,
+run by the single `pytest` runner. Each module launches `python -m
+generic_scraper` as a subprocess — it imports nothing from the package. When a
+`qa/NN_*.md` procedure changes, update the matching `tests/e2e/` module in the
+same QA work.
 
 ## Commands
 
