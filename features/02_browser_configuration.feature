@@ -4,7 +4,8 @@ Feature: Configure browser type for browser-based scraping engines
   I want to set the browser type when using Playwright or Selenium
   So that the Scraper launches the correct browser on the worker node
 
-  Scenario Outline: Set browser type for Playwright or Selenium
+  # browser_configuration-1: Set browser type for Playwright or Selenium
+  Scenario Outline: browser_configuration-1
     Given I have a ScraperType configuration with "scraper_engine" set to "<engine>"
     And "browser_type" set to "<browser>"
     When I initialize the Scraper on a Swarm Forge worker

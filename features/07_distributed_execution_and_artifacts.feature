@@ -4,19 +4,31 @@ Feature: Distributed execution, artifact upload, and node affinity
   I want to run scraping tasks across multiple workers, collect artifacts, and control node affinity
   So that scraping jobs scale and results are preserved
 
-  Scenario: Run scraping job across multiple workers
+  # distributed_execution_and_artifacts-1: Run scraping job across multiple workers
+  Scenario Outline: distributed_execution_and_artifacts-1
     Given I have a ScraperType configuration with "scraper_engine" set to "requests"
-    And the job is configured to run with 3 parallel shards
-    When the Swarm Forge orchestrator schedules the job
-    Then the job should run on 3 distinct worker nodes
+    And the job is configured to run with <shards> parallel shards
+    When the orchestrator schedules the job
+    Then the job should run on <shards> distinct worker nodes
     And each worker should produce a parsed artifact
 
-  Scenario: Upload artifacts to central storage
-    Given a worker produced "parsed_result.json"
-    When the worker finishes the shard
-    Then the artifact "parsed_result.json" should be uploaded to the job artifact store
+    Examples:
+      | shards |
+      | 3      |
+      | 5      |
 
-  Scenario: Respect node affinity and resource limits
+  # distributed_execution_and_artifacts-2: Upload artifacts to central storage
+  Scenario Outline: distributed_execution_and_artifacts-2
+    Given a worker produced "<artifact>"
+    When the worker finishes the shard
+    Then the artifact "<artifact>" should be uploaded to the job artifact store
+
+    Examples:
+      | artifact           |
+      | parsed_result.json |
+
+  # distributed_execution_and_artifacts-3: Respect node affinity and resource limits
+  Scenario: distributed_execution_and_artifacts-3
     Given a ScraperType configuration with "browser_type" set to "chrome"
     And the job requests GPU false and memory 2GB
     When the orchestrator schedules the job

@@ -1,39 +1,49 @@
 {
   "name" : "Distributed execution, artifact upload, and node affinity",
   "scenarios" : [ {
-    "name" : "Run scraping job across multiple workers",
+    "name" : "distributed_execution_and_artifacts-1",
     "steps" : [ {
       "keyword" : "Given",
       "text" : "I have a ScraperType configuration with \"scraper_engine\" set to \"requests\""
     }, {
       "keyword" : "And",
-      "text" : "the job is configured to run with 3 parallel shards"
+      "text" : "the job is configured to run with <shards> parallel shards",
+      "parameters" : [ "shards" ]
     }, {
       "keyword" : "When",
-      "text" : "the Swarm Forge orchestrator schedules the job"
+      "text" : "the orchestrator schedules the job"
     }, {
       "keyword" : "Then",
-      "text" : "the job should run on 3 distinct worker nodes"
+      "text" : "the job should run on <shards> distinct worker nodes",
+      "parameters" : [ "shards" ]
     }, {
       "keyword" : "And",
       "text" : "each worker should produce a parsed artifact"
     } ],
-    "examples" : [ ]
+    "examples" : [ {
+      "shards" : "3"
+    }, {
+      "shards" : "5"
+    } ]
   }, {
-    "name" : "Upload artifacts to central storage",
+    "name" : "distributed_execution_and_artifacts-2",
     "steps" : [ {
       "keyword" : "Given",
-      "text" : "a worker produced \"parsed_result.json\""
+      "text" : "a worker produced \"<artifact>\"",
+      "parameters" : [ "artifact" ]
     }, {
       "keyword" : "When",
       "text" : "the worker finishes the shard"
     }, {
       "keyword" : "Then",
-      "text" : "the artifact \"parsed_result.json\" should be uploaded to the job artifact store"
+      "text" : "the artifact \"<artifact>\" should be uploaded to the job artifact store",
+      "parameters" : [ "artifact" ]
     } ],
-    "examples" : [ ]
+    "examples" : [ {
+      "artifact" : "parsed_result.json"
+    } ]
   }, {
-    "name" : "Respect node affinity and resource limits",
+    "name" : "distributed_execution_and_artifacts-3",
     "steps" : [ {
       "keyword" : "Given",
       "text" : "a ScraperType configuration with \"browser_type\" set to \"chrome\""

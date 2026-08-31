@@ -1,7 +1,7 @@
 {
   "name" : "Default and secondary choices for ScraperType",
   "scenarios" : [ {
-    "name" : "Use default values when none provided",
+    "name" : "defaults_and_fallbacks-1",
     "steps" : [ {
       "keyword" : "Given",
       "text" : "I have an empty ScraperType configuration"
@@ -17,13 +17,15 @@
     } ],
     "examples" : [ ]
   }, {
-    "name" : "Use secondary choice when primary unavailable",
+    "name" : "defaults_and_fallbacks-2",
     "steps" : [ {
       "keyword" : "Given",
-      "text" : "I have a ScraperType configuration with \"scraper_engine\" set to \"playwright\""
+      "text" : "I have a ScraperType configuration with \"scraper_engine\" set to \"<engine>\"",
+      "parameters" : [ "engine" ]
     }, {
       "keyword" : "And",
-      "text" : "Playwright is not available on the worker node"
+      "text" : "\"<engine>\" is not available on the worker node",
+      "parameters" : [ "engine" ]
     }, {
       "keyword" : "When",
       "text" : "I initialize the Scraper"
@@ -31,6 +33,10 @@
       "keyword" : "Then",
       "text" : "the Scraper should fall back to \"requests\""
     } ],
-    "examples" : [ ]
+    "examples" : [ {
+      "engine" : "playwright"
+    }, {
+      "engine" : "selenium"
+    } ]
   } ]
 }

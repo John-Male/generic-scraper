@@ -7,13 +7,12 @@ Feature: End-to-end fetch and parse using configured options
   Background:
     Given a test URL "https://example.com/test-page"
 
-  Scenario Outline: Fetch and parse using engine and processor
-    Given I have a ScraperType configuration with:
-      | key             | value        |
-      | scraper_engine  | <engine>     |
-      | processing_type | <processor>  |
+  # end_to_end_fetch_parse-1: Fetch and parse using engine and processor
+  Scenario Outline: end_to_end_fetch_parse-1
+    Given I have a ScraperType configuration with "scraper_engine" set to "<engine>"
+    And "processing_type" set to "<processor>"
     When I initialize the Scraper on a worker node
-    And I fetch "https://example.com/test-page"
+    And I fetch the test URL
     Then the Scraper should return a parsed document using "<processor>"
     And the parsed document should contain the page title
 

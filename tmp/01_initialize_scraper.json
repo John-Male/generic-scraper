@@ -1,7 +1,7 @@
 {
   "name" : "Initialize Scraper with chosen scraping engine",
   "scenarios" : [ {
-    "name" : "Initialize Scraper with different engines",
+    "name" : "initialize_scraper-1",
     "steps" : [ {
       "keyword" : "Given",
       "text" : "I have a ScraperType configuration with \"scraper_engine\" set to \"<engine>\"",

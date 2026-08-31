@@ -7,7 +7,8 @@ Feature: Initialize Scraper with chosen scraping engine
   Background:
     Given default scraper configuration exists
 
-  Scenario Outline: Initialize Scraper with different engines
+  # initialize_scraper-1: Initialize Scraper with different engines
+  Scenario Outline: initialize_scraper-1
     Given I have a ScraperType configuration with "scraper_engine" set to "<engine>"
     When I initialize the Scraper
     Then the Scraper should use the "<engine>" engine

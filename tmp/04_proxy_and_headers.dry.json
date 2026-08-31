@@ -2,32 +2,59 @@
   "schema_version" : 1,
   "feature_name" : "Proxy configuration and header pass key",
   "summary" : {
-    "step_occurrences" : 6,
-    "unique_steps" : 5,
-    "findings" : 1
+    "step_occurrences" : 9,
+    "unique_steps" : 9,
+    "findings" : 2
   },
   "findings" : [ {
-    "kind" : "exact-duplicate",
-    "confidence" : "high",
-    "canonical_candidate" : "I have a ScraperType configuration with:",
-    "pattern_candidate" : "^I have a ScraperType configuration with:$",
+    "kind" : "possible-synonym",
+    "confidence" : "medium",
     "members" : [ {
-      "text" : "I have a ScraperType configuration with:",
+      "text" : "\"proxy_pass_key\" set to \"<pass_key>\"",
+      "locations" : [ {
+        "section" : "scenario",
+        "scenario_index" : 1,
+        "scenario_name" : "proxy_and_headers-2",
+        "step_index" : 0,
+        "keyword" : "Given"
+      } ]
+    }, {
+      "text" : "\"proxy_pass_val\" set to \"<pass_val>\"",
+      "locations" : [ {
+        "section" : "scenario",
+        "scenario_index" : 1,
+        "scenario_name" : "proxy_and_headers-2",
+        "step_index" : 1,
+        "keyword" : "And"
+      } ]
+    } ],
+    "reason" : "step texts share many non-placeholder tokens and may describe the same concept",
+    "suggested_action" : "Review manually before editing; normalize the Gherkin only when the different wording is accidental drift.",
+    "score" : 0.6
+  }, {
+    "kind" : "possible-synonym",
+    "confidence" : "medium",
+    "members" : [ {
+      "text" : "\"proxy_port\" set to \"<proxy_port>\"",
       "locations" : [ {
         "section" : "scenario",
         "scenario_index" : 0,
-        "scenario_name" : "Initialize Scraper with proxy settings",
-        "step_index" : 0,
-        "keyword" : "Given"
-      }, {
+        "scenario_name" : "proxy_and_headers-1",
+        "step_index" : 1,
+        "keyword" : "And"
+      } ]
+    }, {
+      "text" : "\"proxy_url\" set to \"<proxy_url>\"",
+      "locations" : [ {
         "section" : "scenario",
-        "scenario_index" : 1,
-        "scenario_name" : "Include pass key header when provided",
+        "scenario_index" : 0,
+        "scenario_name" : "proxy_and_headers-1",
         "step_index" : 0,
         "keyword" : "Given"
       } ]
     } ],
-    "reason" : "same step text appears more than once in the IR",
-    "suggested_action" : "Treat this as a vocabulary reuse audit; repeated use across scenarios is usually acceptable."
+    "reason" : "step texts share many non-placeholder tokens and may describe the same concept",
+    "suggested_action" : "Review manually before editing; normalize the Gherkin only when the different wording is accidental drift.",
+    "score" : 0.5
   } ]
 }

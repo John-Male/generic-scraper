@@ -1,29 +1,40 @@
 {
   "name" : "Error handling, retries, and fallback behavior",
   "scenarios" : [ {
-    "name" : "Retry on transient network error",
+    "name" : "error_handling_and_retries-1",
     "steps" : [ {
       "keyword" : "Given",
       "text" : "I have a ScraperType configuration with \"scraper_engine\" set to \"requests\""
     }, {
       "keyword" : "And",
-      "text" : "retry policy set to 3 attempts with exponential backoff"
+      "text" : "retry policy set to <attempts> attempts with exponential backoff",
+      "parameters" : [ "attempts" ]
     }, {
       "keyword" : "When",
       "text" : "a transient network error occurs during fetch"
     }, {
       "keyword" : "Then",
-      "text" : "the Scraper should retry up to 3 times before failing"
+      "text" : "the Scraper should retry up to <attempts> times before failing",
+      "parameters" : [ "attempts" ]
     } ],
-    "examples" : [ ]
+    "examples" : [ {
+      "attempts" : "3"
+    }, {
+      "attempts" : "5"
+    } ]
   }, {
-    "name" : "Fallback to secondary engine on engine failure",
+    "name" : "error_handling_and_retries-2",
     "steps" : [ {
       "keyword" : "Given",
-      "text" : "I have a ScraperType configuration with:"
+      "text" : "I have a ScraperType configuration with \"scraper_engine\" set to \"<engine>\"",
+      "parameters" : [ "engine" ]
     }, {
       "keyword" : "And",
-      "text" : "Selenium fails to start on the worker"
+      "text" : "\"secondary\" set to \"requests\""
+    }, {
+      "keyword" : "And",
+      "text" : "\"<engine>\" fails to start on the worker",
+      "parameters" : [ "engine" ]
     }, {
       "keyword" : "When",
       "text" : "I initialize the Scraper"
@@ -34,19 +45,28 @@
       "keyword" : "And",
       "text" : "the initialization should succeed"
     } ],
-    "examples" : [ ]
+    "examples" : [ {
+      "engine" : "selenium"
+    }, {
+      "engine" : "playwright"
+    } ]
   }, {
-    "name" : "Fail with descriptive error when no engine available",
+    "name" : "error_handling_and_retries-3",
     "steps" : [ {
       "keyword" : "Given",
-      "text" : "I have a ScraperType configuration with:"
+      "text" : "I have a ScraperType configuration with \"scraper_engine\" set to \"<engine>\"",
+      "parameters" : [ "engine" ]
     }, {
       "keyword" : "When",
       "text" : "I initialize the Scraper"
     }, {
       "keyword" : "Then",
-      "text" : "the Scraper initialization should fail with \"UnsupportedScraperEngineError\""
+      "text" : "the Scraper initialization should fail with \"<error>\"",
+      "parameters" : [ "error" ]
     } ],
-    "examples" : [ ]
+    "examples" : [ {
+      "engine" : "unknown",
+      "error" : "UnsupportedScraperEngineError"
+    } ]
   } ]
 }

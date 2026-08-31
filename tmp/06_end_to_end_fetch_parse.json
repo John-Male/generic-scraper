@@ -1,16 +1,21 @@
 {
   "name" : "End-to-end fetch and parse using configured options",
   "scenarios" : [ {
-    "name" : "Fetch and parse using engine and processor",
+    "name" : "end_to_end_fetch_parse-1",
     "steps" : [ {
       "keyword" : "Given",
-      "text" : "I have a ScraperType configuration with:"
+      "text" : "I have a ScraperType configuration with \"scraper_engine\" set to \"<engine>\"",
+      "parameters" : [ "engine" ]
+    }, {
+      "keyword" : "And",
+      "text" : "\"processing_type\" set to \"<processor>\"",
+      "parameters" : [ "processor" ]
     }, {
       "keyword" : "When",
       "text" : "I initialize the Scraper on a worker node"
     }, {
       "keyword" : "And",
-      "text" : "I fetch \"https://example.com/test-page\""
+      "text" : "I fetch the test URL"
     }, {
       "keyword" : "Then",
       "text" : "the Scraper should return a parsed document using \"<processor>\"",

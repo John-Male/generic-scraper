@@ -1,7 +1,7 @@
 {
   "name" : "Configure browser type for browser-based scraping engines",
   "scenarios" : [ {
-    "name" : "Set browser type for Playwright or Selenium",
+    "name" : "browser_configuration-1",
     "steps" : [ {
       "keyword" : "Given",
       "text" : "I have a ScraperType configuration with \"scraper_engine\" set to \"<engine>\"",
