@@ -87,9 +87,15 @@ class ScraperType:
 
     @classmethod
     def from_yaml(cls, path: str | Path) -> ScraperType:
-        loaded = yaml.safe_load(Path(path).read_text()) or {}
+        return cls.from_yaml_text(Path(path).read_text(), source=str(path))
+
+    @classmethod
+    def from_yaml_text(cls, text: str, *, source: str = "<yaml>") -> ScraperType:
+        """Parse YAML *text* (no filesystem). ``source`` names it in errors."""
+
+        loaded = yaml.safe_load(text) or {}
         if not isinstance(loaded, dict):
-            raise ValueError(f"{path}: top-level YAML must be a mapping")
+            raise ValueError(f"{source}: top-level YAML must be a mapping")
         return cls.from_dict(loaded)
 
     @property

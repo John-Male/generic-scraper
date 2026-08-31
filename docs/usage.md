@@ -26,6 +26,10 @@ print(scraper.fallback_chain)  # ("requests",)
 A production caller supplies a live platform instead of `FakePlatform`; the
 `Scraper` API is identical.
 
+`ScraperType` is built from a mapping with `from_dict`, from a file with
+`from_yaml`, or from an in-memory YAML string with `from_yaml_text` (no
+filesystem). All three share one validation path.
+
 ## ScraperType keys
 
 | Key | Meaning | Default |
