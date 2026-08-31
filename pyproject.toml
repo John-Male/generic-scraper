@@ -29,6 +29,7 @@ testpaths = ["tests"]
 pythonpath = ["src", "."]
 markers = [
     "property: property-based tests (run with -m property)",
+    "hardening: mutation-hardening tests (run with -m hardening)",
 ]
 
 [tool.ruff]

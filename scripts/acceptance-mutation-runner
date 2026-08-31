@@ -1,0 +1,126 @@
+#!/usr/bin/env python3
+"""Persistent runner adapter for ``gherkin-mutator``.
+
+The mutator starts this process once and streams newline-delimited JSON job
+requests on stdin, one per mutated feature IR. For each job we expand the
+mutated IR with the project acceptance runtime and execute every scenario
+execution it represents, exactly as the generated pytest entry points would.
+A failing execution means the acceptance tests detected the mutated example
+value.
+
+Protocol (see APS mutator-spec.md):
+
+    request  {"id", "feature_json", "generated_dir", "work_dir", "timeout"}
+    response {"id", "outcome", "output", "error", "duration"}
+
+    outcome: test_success | test_failure | infrastructure_error
+
+Only real infrastructure problems (unreadable IR, broken runtime import) are
+reported as ``infrastructure_error``; a step assertion or any other exception
+raised while executing the mutated IR is a ``test_failure`` -- the spec change
+was caught.
+"""
+
+from __future__ import annotations
+
+import io
+import json
+import sys
+import time
+import traceback
+from contextlib import redirect_stderr, redirect_stdout
+from pathlib import Path
+
+_REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+_SRC = _REPO_ROOT / "src"
+if str(_SRC) not in sys.path:
+    sys.path.insert(0, str(_SRC))
+
+try:
+    from tests.acceptance.runtime import iter_executions, run_execution
+except Exception as error:  # pragma: no cover - import wiring
+    sys.stderr.write(f"runner adapter cannot import acceptance runtime: {error}\n")
+    raise
+
+
+def _run_job(request: dict) -> dict:
+    start = time.perf_counter()
+    job_id = request.get("id", "")
+    feature_json = request.get("feature_json", "")
+
+    try:
+        ir = json.loads(Path(feature_json).read_text())
+    except (OSError, json.JSONDecodeError, TypeError) as error:
+        return {
+            "id": job_id,
+            "outcome": "infrastructure_error",
+            "output": "",
+            "error": f"cannot read mutated IR {feature_json!r}: {error}",
+            "duration": int((time.perf_counter() - start) * 1e9),
+        }
+
+    captured = io.StringIO()
+    try:
+        executions = iter_executions(ir)
+    except Exception as error:  # noqa: BLE001 - malformed IR is infra, not a kill
+        return {
+            "id": job_id,
+            "outcome": "infrastructure_error",
+            "output": "",
+            "error": f"cannot expand mutated IR: {error}",
+            "duration": int((time.perf_counter() - start) * 1e9),
+        }
+
+    try:
+        with redirect_stdout(captured), redirect_stderr(captured):
+            for execution in executions:
+                run_execution(execution)
+    except (ImportError, OSError) as error:
+        # The step modules or the library under test could not be imported --
+        # a broken environment, not a spec change the tests caught.
+        return {
+            "id": job_id,
+            "outcome": "infrastructure_error",
+            "output": captured.getvalue(),
+            "error": f"{type(error).__name__}: {error}\n{traceback.format_exc()}",
+            "duration": int((time.perf_counter() - start) * 1e9),
+        }
+    except BaseException as error:  # noqa: BLE001 - any failure kills the mutant
+        return {
+            "id": job_id,
+            "outcome": "test_failure",
+            "output": captured.getvalue(),
+            "error": f"{type(error).__name__}: {error}\n{traceback.format_exc()}",
+            "duration": int((time.perf_counter() - start) * 1e9),
+        }
+
+    return {
+        "id": job_id,
+        "outcome": "test_success",
+        "output": captured.getvalue(),
+        "error": "",
+        "duration": int((time.perf_counter() - start) * 1e9),
+    }
+
+
+def main() -> int:
+    out = sys.stdout
+    for line in sys.stdin:
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            request = json.loads(line)
+        except json.JSONDecodeError as error:
+            sys.stderr.write(f"runner adapter: bad job line: {error}\n")
+            continue
+        response = _run_job(request)
+        out.write(json.dumps(response) + "\n")
+        out.flush()
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
