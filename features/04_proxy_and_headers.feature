@@ -9,7 +9,8 @@ Feature: Proxy configuration and header pass key
 
   # proxy_and_headers-1: Initialize Scraper with proxy settings
   Scenario Outline: proxy_and_headers-1
-    Given "proxy_url" set to "<proxy_url>"
+    Given "scraper_engine" set to "requests"
+    And "proxy_url" set to "<proxy_url>"
     And "proxy_port" set to "<proxy_port>"
     When I initialize the Scraper on a worker node
     Then the Scraper should configure the HTTP client to use the proxy "<proxy_url>:<proxy_port>"

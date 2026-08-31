@@ -1,0 +1,2 @@
+scraper_engine: selenium
+browser_type: firefox

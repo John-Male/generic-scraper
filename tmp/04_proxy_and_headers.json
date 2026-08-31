@@ -4,6 +4,9 @@
     "name" : "proxy_and_headers-1",
     "steps" : [ {
       "keyword" : "Given",
+      "text" : "\"scraper_engine\" set to \"requests\""
+    }, {
+      "keyword" : "And",
       "text" : "\"proxy_url\" set to \"<proxy_url>\"",
       "parameters" : [ "proxy_url" ]
     }, {

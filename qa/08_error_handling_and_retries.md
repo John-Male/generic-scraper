@@ -6,8 +6,9 @@ Covers scenarios `error_handling_and_retries-1..3`.
 
 For each `attempts` in `3`, `5`:
 
-1. Config with `scraper_engine: requests` and
-   `retry: {attempts: <attempts>, backoff: exponential}`.
+1. Config with `scraper_engine: requests` and a retry policy of `<attempts>`
+   attempts with exponential backoff, expressed in the finalized `ScraperType`
+   schema (see `qa/fixtures.md`).
 2. Force more failures than attempts:
    `python -m generic_scraper fetch --config <config> --url https://example.com/test-page --fixture fixtures/test_page.html --transient-errors <attempts + 1> --report-attempts`
 3. Expect **non-zero** exit (all attempts exhausted). Assert stderr names a

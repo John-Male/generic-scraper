@@ -2,8 +2,8 @@
   "schema_version" : 1,
   "feature_name" : "Proxy configuration and header pass key",
   "summary" : {
-    "step_occurrences" : 9,
-    "unique_steps" : 9,
+    "step_occurrences" : 10,
+    "unique_steps" : 10,
     "findings" : 2
   },
   "findings" : [ {
@@ -40,7 +40,7 @@
         "section" : "scenario",
         "scenario_index" : 0,
         "scenario_name" : "proxy_and_headers-1",
-        "step_index" : 1,
+        "step_index" : 2,
         "keyword" : "And"
       } ]
     }, {
@@ -49,8 +49,8 @@
         "section" : "scenario",
         "scenario_index" : 0,
         "scenario_name" : "proxy_and_headers-1",
-        "step_index" : 0,
-        "keyword" : "Given"
+        "step_index" : 1,
+        "keyword" : "And"
       } ]
     } ],
     "reason" : "step texts share many non-placeholder tokens and may describe the same concept",
