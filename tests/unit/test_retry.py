@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import pytest
 
-from generic_scraper.config import RetryPolicy
 from generic_scraper.errors import FetchError, TransientFetchError
 from generic_scraper.retry import RetryRecorder, call_with_retry
+from generic_scraper.retry_policy import RetryPolicy
 
 
 def test_returns_immediately_on_success() -> None:
@@ -56,18 +56,29 @@ def test_gives_up_after_configured_attempts(attempts: int) -> None:
     assert len(recorder.sleeps) == attempts - 1
 
 
-def test_exponential_backoff_doubles_the_delay() -> None:
-    recorder = RetryRecorder()
+def _always_fails() -> str:
+    raise TransientFetchError("boom")
 
-    def always_fails() -> str:
-        raise TransientFetchError("boom")
+
+@pytest.mark.parametrize(
+    ("backoff", "expected"),
+    [
+        ("exponential", [1.0, 2.0, 4.0]),
+        ("linear", [1.0, 2.0, 3.0]),
+        ("none", [0.0, 0.0, 0.0]),
+    ],
+)
+def test_backoff_strategy_shapes_the_delays(
+    backoff: str, expected: list[float]
+) -> None:
+    recorder = RetryRecorder()
 
     with pytest.raises(FetchError):
         call_with_retry(
-            always_fails,
-            RetryPolicy(attempts=4, backoff="exponential"),
+            _always_fails,
+            RetryPolicy(attempts=4, backoff=backoff),
             sleep=lambda _s: None,
             recorder=recorder,
         )
 
-    assert recorder.sleeps == [1.0, 2.0, 4.0]
+    assert recorder.sleeps == expected

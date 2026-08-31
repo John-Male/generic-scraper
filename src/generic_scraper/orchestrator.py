@@ -114,24 +114,36 @@ class FakeOrchestrator:
         produce: Callable[[int, str], str] | None = None,
     ) -> JobResult:
         request = resources or ResourceRequest()
-        eligible = [node for node in self.nodes if node.satisfies(request)]
-        if len(eligible) < max(shards, 1):
+        eligible = self._eligible_nodes(request)
+        needed = max(shards, 1)
+        if len(eligible) < needed:
             raise ScraperError(
                 "ScraperError: not enough worker nodes satisfy the resource "
-                f"constraints (need {max(shards, 1)}, have {len(eligible)})"
+                f"constraints (need {needed}, have {len(eligible)})"
             )
 
         chosen = eligible[:shards] if shards else eligible[:1]
+        results = self._produce_shards(chosen, artifact_name, produce)
+        return JobResult(
+            shards=shards,
+            worker_nodes=tuple(r.node for r in results),
+            shard_results=results,
+            placement_node=eligible[0].name,
+            uploaded=tuple(self.store.uploaded),
+        )
+
+    def _eligible_nodes(self, request: ResourceRequest) -> list[NodeCapacity]:
+        return [node for node in self.nodes if node.satisfies(request)]
+
+    def _produce_shards(
+        self,
+        chosen: list[NodeCapacity],
+        artifact_name: str,
+        produce: Callable[[int, str], str] | None,
+    ) -> tuple[ShardResult, ...]:
         results: list[ShardResult] = []
         for index, node in enumerate(chosen):
             name = produce(index, node.name) if produce else artifact_name
             self.store.upload(name)
             results.append(ShardResult(shard=index, node=node.name, artifact=name))
-
-        return JobResult(
-            shards=shards,
-            worker_nodes=tuple(r.node for r in results),
-            shard_results=tuple(results),
-            placement_node=eligible[0].name,
-            uploaded=tuple(self.store.uploaded),
-        )
+        return tuple(results)

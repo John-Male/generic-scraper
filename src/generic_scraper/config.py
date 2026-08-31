@@ -14,33 +14,12 @@ from typing import Any
 
 import yaml
 
+from generic_scraper.retry_policy import RetryPolicy
+
+__all__ = ["RetryPolicy", "ScraperType"]
+
 DEFAULT_ENGINE = "requests"
 DEFAULT_PROCESSING_TYPE = "beautifulsoup"
-
-
-@dataclass(frozen=True)
-class RetryPolicy:
-    """How many fetch attempts to make and how to space them out."""
-
-    attempts: int = 1
-    backoff: str = "exponential"
-
-    @classmethod
-    def from_value(cls, value: Any) -> RetryPolicy:
-        if value is None:
-            return cls()
-        if isinstance(value, RetryPolicy):
-            return value
-        if not isinstance(value, dict):
-            raise ValueError("retry policy must be a mapping")
-        unknown = set(value) - {"attempts", "backoff"}
-        if unknown:
-            raise ValueError(f"unknown retry policy key: {sorted(unknown)[0]!r}")
-        attempts = int(value.get("attempts", cls.attempts))
-        if attempts < 1:
-            raise ValueError("retry attempts must be at least 1")
-        backoff = str(value.get("backoff", cls.backoff))
-        return cls(attempts=attempts, backoff=backoff)
 
 
 _TRUE = {"true", "yes", "1", "on"}

@@ -11,8 +11,8 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import TypeVar
 
-from generic_scraper.config import RetryPolicy
 from generic_scraper.errors import FetchError, TransientFetchError
+from generic_scraper.retry_policy import RetryPolicy
 
 T = TypeVar("T")
 

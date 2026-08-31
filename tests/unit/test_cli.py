@@ -32,6 +32,14 @@ def test_describe_reports_defaults_for_empty_config(capsys: Cap) -> None:
     assert out["retry"] == {"attempts": 1, "backoff": "exponential"}
 
 
+def test_describe_without_a_config_uses_built_in_defaults(capsys: Cap) -> None:
+    code, out, _ = _run(capsys, "describe")
+
+    assert code == 0
+    assert out["engine"] == "requests"
+    assert out["browser"] is None
+
+
 def test_describe_shows_fallback_chain_when_engine_unavailable(
     capsys: Cap,
 ) -> None:
@@ -69,6 +77,27 @@ def test_describe_unknown_engine_exits_nonzero_with_class_name(
     assert code == 1
     assert out == {}
     assert err.startswith("UnsupportedScraperEngineError")
+
+
+def test_fetch_without_a_fixture_refuses_to_touch_the_network(capsys: Cap) -> None:
+    code, out, err = _run(capsys, "fetch", "--config", str(CONFIGS / "requests.yaml"))
+
+    assert code == 1
+    assert out == {}
+    assert err.startswith("FetchError")
+
+
+def test_malformed_config_exits_nonzero_with_the_error_class(
+    capsys: Cap, tmp_path: Path
+) -> None:
+    bad = tmp_path / "bad.yaml"
+    bad.write_text("- just\n- a list\n")
+
+    code, out, err = _run(capsys, "describe", "--config", str(bad))
+
+    assert code == 1
+    assert out == {}
+    assert err.startswith("ValueError")
 
 
 def test_fetch_returns_document_summary(capsys: Cap) -> None:

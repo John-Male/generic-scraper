@@ -51,6 +51,14 @@ def test_proxy_port_is_coerced_to_int() -> None:
     assert cfg.proxy_endpoint == "http://proxy.example:8080"
 
 
+def test_proxy_endpoint_without_a_port_is_just_the_url() -> None:
+    cfg = ScraperType.from_dict(
+        {"use_proxy": True, "proxy_url": "http://proxy.example"}
+    )
+
+    assert cfg.proxy_endpoint == "http://proxy.example"
+
+
 def test_proxy_endpoint_is_none_without_proxy() -> None:
     assert ScraperType.from_dict({}).proxy_endpoint is None
 
@@ -75,6 +83,15 @@ def test_retry_policy_is_read_from_nested_mapping() -> None:
     cfg = ScraperType.from_dict({"retry": {"attempts": "5", "backoff": "exponential"}})
 
     assert cfg.retry == RetryPolicy(attempts=5, backoff="exponential")
+
+
+def test_use_proxy_accepts_string_false_from_gherkin() -> None:
+    assert ScraperType.from_dict({"use_proxy": "no"}).use_proxy is False
+
+
+def test_use_proxy_rejects_an_unreadable_value() -> None:
+    with pytest.raises(ValueError, match="cannot read"):
+        ScraperType.from_dict({"use_proxy": "maybe"})
 
 
 def test_unknown_key_is_rejected() -> None:

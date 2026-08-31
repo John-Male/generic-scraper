@@ -53,6 +53,26 @@ def test_start_failure_falls_back_to_configured_secondary() -> None:
     assert resolved.chain == ("selenium", "requests")
 
 
+def test_duplicate_candidate_in_the_chain_is_tried_once() -> None:
+    resolved = resolve_engine(
+        _config(scraper_engine="playwright", secondary="playwright"),
+        FakePlatform.build(unavailable=["playwright"]),
+    )
+
+    assert resolved.engine.name == "requests"
+    assert resolved.chain == ("playwright", "requests")
+
+
+def test_an_unknown_secondary_is_skipped_rather_than_crashing() -> None:
+    resolved = resolve_engine(
+        _config(scraper_engine="playwright", secondary="bogus"),
+        FakePlatform.build(unavailable=["playwright"]),
+    )
+
+    assert resolved.engine.name == "requests"
+    assert resolved.chain == ("playwright", "bogus", "requests")
+
+
 def test_unknown_engine_is_a_hard_error() -> None:
     with pytest.raises(UnsupportedScraperEngineError):
         resolve_engine(_config(scraper_engine="unknown"), FakePlatform.build())

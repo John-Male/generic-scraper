@@ -8,7 +8,11 @@ import pytest
 
 from generic_scraper.config import ScraperType
 from generic_scraper.engines.fake_platform import FakePlatform
-from generic_scraper.errors import FetchError, UnsupportedScraperEngineError
+from generic_scraper.errors import (
+    FetchError,
+    ScraperError,
+    UnsupportedScraperEngineError,
+)
 from generic_scraper.scraper import Scraper
 
 FIXTURE = Path(__file__).parents[2] / "fixtures" / "test_page.html"
@@ -72,6 +76,14 @@ def test_proxy_pass_key_becomes_a_request_header() -> None:
 def test_unknown_engine_fails_initialization() -> None:
     with pytest.raises(UnsupportedScraperEngineError):
         _scraper({"scraper_engine": "unknown"}).initialize()
+
+
+@pytest.mark.parametrize("attr", ["engine_name", "parser_name"])
+def test_introspection_before_initialize_is_a_clear_error(attr: str) -> None:
+    scraper = _scraper({"scraper_engine": "requests"})
+
+    with pytest.raises(ScraperError, match="not initialised"):
+        getattr(scraper, attr)
 
 
 def test_fetch_returns_a_parsed_document_with_the_title() -> None:

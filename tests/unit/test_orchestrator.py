@@ -22,6 +22,11 @@ def test_parse_memory_gb(text: str, expected: float) -> None:
     assert parse_memory_gb(text) == expected
 
 
+def test_parse_memory_gb_rejects_an_unreadable_size() -> None:
+    with pytest.raises(ValueError, match="as a memory size"):
+        parse_memory_gb("lots")
+
+
 @pytest.mark.parametrize("shards", [3, 5])
 def test_job_runs_on_distinct_worker_nodes(shards: int) -> None:
     result = FakeOrchestrator().schedule(shards=shards)

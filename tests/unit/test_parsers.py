@@ -41,6 +41,14 @@ def test_every_parser_handles_a_page_with_no_title(name: str) -> None:
     assert document.title is None
 
 
+@pytest.mark.parametrize("name", KNOWN_PROCESSING_TYPES)
+def test_every_parser_handles_empty_html(name: str) -> None:
+    document = create_parser(name).parse("")
+
+    assert document.title is None
+    assert document.text == ""
+
+
 def test_unknown_processing_type_is_rejected() -> None:
     with pytest.raises(UnsupportedProcessingTypeError, match="xml"):
         create_parser("xml")
