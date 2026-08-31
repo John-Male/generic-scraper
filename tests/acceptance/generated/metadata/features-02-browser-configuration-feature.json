@@ -1,0 +1,10 @@
+{
+  "feature_path": "features/02_browser_configuration.feature",
+  "generated_files": [
+    "tests/acceptance/generated/test_02_browser_configuration.py"
+  ],
+  "hash_scope": "generated_files",
+  "implementation_hash": "sha256:7f026c6327d61847c5780ca6af529e39a2a7a793f904597e767f27ab3ab1eaae",
+  "ir_path": "tests/acceptance/ir/02_browser_configuration.json",
+  "schema_version": 1
+}

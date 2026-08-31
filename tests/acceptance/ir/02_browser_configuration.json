@@ -1,0 +1,35 @@
+{
+  "name" : "Configure browser type for browser-based scraping engines",
+  "scenarios" : [ {
+    "name" : "browser_configuration-1",
+    "steps" : [ {
+      "keyword" : "Given",
+      "text" : "I have a ScraperType configuration with \"scraper_engine\" set to \"<engine>\"",
+      "parameters" : [ "engine" ]
+    }, {
+      "keyword" : "And",
+      "text" : "\"browser_type\" set to \"<browser>\"",
+      "parameters" : [ "browser" ]
+    }, {
+      "keyword" : "When",
+      "text" : "I initialize the Scraper on a Swarm Forge worker"
+    }, {
+      "keyword" : "Then",
+      "text" : "the Scraper should launch \"<browser>\" for \"<engine>\"",
+      "parameters" : [ "browser", "engine" ]
+    } ],
+    "examples" : [ {
+      "engine" : "playwright",
+      "browser" : "chrome"
+    }, {
+      "engine" : "playwright",
+      "browser" : "firefox"
+    }, {
+      "engine" : "selenium",
+      "browser" : "chrome"
+    }, {
+      "engine" : "selenium",
+      "browser" : "firefox"
+    } ]
+  } ]
+}

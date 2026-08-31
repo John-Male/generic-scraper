@@ -1,0 +1,10 @@
+{
+  "feature_path": "features/05_processing_types.feature",
+  "generated_files": [
+    "tests/acceptance/generated/test_05_processing_types.py"
+  ],
+  "hash_scope": "generated_files",
+  "implementation_hash": "sha256:6cc761e37a6996c28073655c93e32c9e1cb480bf94f88d0dbece775648c862fc",
+  "ir_path": "tests/acceptance/ir/05_processing_types.json",
+  "schema_version": 1
+}

@@ -1,0 +1,10 @@
+{
+  "feature_path": "features/06_end_to_end_fetch_parse.feature",
+  "generated_files": [
+    "tests/acceptance/generated/test_06_end_to_end_fetch_parse.py"
+  ],
+  "hash_scope": "generated_files",
+  "implementation_hash": "sha256:bdedc0168049252908aeaa1c72b837d5ce1740cae2818be34913de7458f71cb1",
+  "ir_path": "tests/acceptance/ir/06_end_to_end_fetch_parse.json",
+  "schema_version": 1
+}

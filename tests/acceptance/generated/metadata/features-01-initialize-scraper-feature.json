@@ -1,0 +1,10 @@
+{
+  "feature_path": "features/01_initialize_scraper.feature",
+  "generated_files": [
+    "tests/acceptance/generated/test_01_initialize_scraper.py"
+  ],
+  "hash_scope": "generated_files",
+  "implementation_hash": "sha256:c2a610b32c5d4dc8d2fdbb0fcfeac90f8b3397b654a0585a900069e758a90973",
+  "ir_path": "tests/acceptance/ir/01_initialize_scraper.json",
+  "schema_version": 1
+}

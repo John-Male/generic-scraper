@@ -1,0 +1,10 @@
+{
+  "feature_path": "features/04_proxy_and_headers.feature",
+  "generated_files": [
+    "tests/acceptance/generated/test_04_proxy_and_headers.py"
+  ],
+  "hash_scope": "generated_files",
+  "implementation_hash": "sha256:4c11b8e78235911811640c032fc24b34f44ea7dc022231e5154164c46ac7789b",
+  "ir_path": "tests/acceptance/ir/04_proxy_and_headers.json",
+  "schema_version": 1
+}

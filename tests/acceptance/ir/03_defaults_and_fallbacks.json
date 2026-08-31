@@ -1,0 +1,42 @@
+{
+  "name" : "Default and secondary choices for ScraperType",
+  "scenarios" : [ {
+    "name" : "defaults_and_fallbacks-1",
+    "steps" : [ {
+      "keyword" : "Given",
+      "text" : "I have an empty ScraperType configuration"
+    }, {
+      "keyword" : "When",
+      "text" : "I initialize the Scraper"
+    }, {
+      "keyword" : "Then",
+      "text" : "the Scraper should use \"requests\" as the default scraper engine"
+    }, {
+      "keyword" : "And",
+      "text" : "the Scraper should have no browser configured"
+    } ],
+    "examples" : [ ]
+  }, {
+    "name" : "defaults_and_fallbacks-2",
+    "steps" : [ {
+      "keyword" : "Given",
+      "text" : "I have a ScraperType configuration with \"scraper_engine\" set to \"<engine>\"",
+      "parameters" : [ "engine" ]
+    }, {
+      "keyword" : "And",
+      "text" : "\"<engine>\" is not available on the worker node",
+      "parameters" : [ "engine" ]
+    }, {
+      "keyword" : "When",
+      "text" : "I initialize the Scraper"
+    }, {
+      "keyword" : "Then",
+      "text" : "the Scraper should fall back to \"requests\""
+    } ],
+    "examples" : [ {
+      "engine" : "playwright"
+    }, {
+      "engine" : "selenium"
+    } ]
+  } ]
+}

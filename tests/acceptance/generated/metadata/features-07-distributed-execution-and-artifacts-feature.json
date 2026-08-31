@@ -1,0 +1,10 @@
+{
+  "feature_path": "features/07_distributed_execution_and_artifacts.feature",
+  "generated_files": [
+    "tests/acceptance/generated/test_07_distributed_execution_and_artifacts.py"
+  ],
+  "hash_scope": "generated_files",
+  "implementation_hash": "sha256:675ac85957addd9d7a3a996a3e30bbec8cc42a2f87115ce801239973a4496d74",
+  "ir_path": "tests/acceptance/ir/07_distributed_execution_and_artifacts.json",
+  "schema_version": 1
+}

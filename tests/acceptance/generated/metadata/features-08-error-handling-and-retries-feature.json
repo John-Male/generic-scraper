@@ -1,0 +1,10 @@
+{
+  "feature_path": "features/08_error_handling_and_retries.feature",
+  "generated_files": [
+    "tests/acceptance/generated/test_08_error_handling_and_retries.py"
+  ],
+  "hash_scope": "generated_files",
+  "implementation_hash": "sha256:7ede0bf754d79440333c610373b96d8b8eb649b994315cf102099524d14ebe75",
+  "ir_path": "tests/acceptance/ir/08_error_handling_and_retries.json",
+  "schema_version": 1
+}

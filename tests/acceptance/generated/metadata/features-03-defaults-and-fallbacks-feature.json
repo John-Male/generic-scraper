@@ -1,0 +1,10 @@
+{
+  "feature_path": "features/03_defaults_and_fallbacks.feature",
+  "generated_files": [
+    "tests/acceptance/generated/test_03_defaults_and_fallbacks.py"
+  ],
+  "hash_scope": "generated_files",
+  "implementation_hash": "sha256:a94f761fc8fe2fe39d77a34bf729e50337cca753eee53a2ea55184cec49fdb82",
+  "ir_path": "tests/acceptance/ir/03_defaults_and_fallbacks.json",
+  "schema_version": 1
+}
