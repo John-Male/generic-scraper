@@ -119,7 +119,8 @@ class FakeOrchestrator:
         if len(eligible) < needed:
             raise ScraperError(
                 "ScraperError: not enough worker nodes satisfy the resource "
-                f"constraints (need {needed}, have {len(eligible)})"
+                f"constraints (need {needed}, have {len(eligible)}; "
+                f"required gpu={request.gpu}, memory>={request.memory_gb:g}GB)"
             )
 
         chosen = eligible[:shards] if shards else eligible[:1]

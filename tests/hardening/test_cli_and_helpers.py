@@ -120,7 +120,7 @@ def test_cli_run_creates_a_missing_artifact_store_tree(tmp_path: Path) -> None:
     )
 
     assert code == 0
-    assert (store / "parsed_result.json").exists()
+    assert (store / "node-0" / "parsed_result.json").exists()
 
 
 def test_cli_run_writes_a_parsed_artifact_per_shard(tmp_path: Path) -> None:

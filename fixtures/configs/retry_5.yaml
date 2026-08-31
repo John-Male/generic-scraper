@@ -1,0 +1,4 @@
+scraper_engine: requests
+retry:
+  attempts: 5
+  backoff: exponential

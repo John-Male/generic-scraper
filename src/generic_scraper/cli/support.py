@@ -58,9 +58,18 @@ def write_shard_summary(
 
 
 def publish_uploads(store_dir: Path, names: Sequence[str]) -> None:
+    """Write each uploaded artifact under ``store_dir``.
+
+    ``names`` are node-namespaced (``"node-0/parsed_result.json"``), so a
+    multi-shard job's identically named artifacts land in per-node
+    subdirectories instead of overwriting one another.
+    """
+
     store_dir.mkdir(parents=True, exist_ok=True)
     for name in names:
-        (store_dir / Path(name).name).write_text("uploaded\n")
+        target = store_dir / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text("uploaded\n")
 
 
 def load_config(path: str | None) -> ScraperType:

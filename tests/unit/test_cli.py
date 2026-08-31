@@ -179,7 +179,12 @@ def test_run_shards_job_and_uploads_artifacts(
     assert out["shards"] == 3
     assert len(set(out["worker_nodes"])) == 3
     assert out["uploaded"] == ["parsed_result.json"] * 3
-    assert (tmp_path / "store" / "parsed_result.json").exists()
+    # Each shard's artifact is namespaced by worker node so the three
+    # identically named uploads do not overwrite one another.
+    store = tmp_path / "store"
+    assert sorted(p.relative_to(store).as_posix() for p in store.rglob("*.json")) == [
+        f"{node}/parsed_result.json" for node in out["worker_nodes"]
+    ]
 
 
 def test_run_places_job_on_a_node_that_meets_resource_limits(

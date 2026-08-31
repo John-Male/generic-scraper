@@ -93,6 +93,6 @@ These flags let a caller reach conditions the environment will not produce:
 | `--print-request-headers` | `fetch` also reports outbound headers (values redacted). |
 | `--shards N` | `run` splits the job into `N` shards. |
 | `--artifact-dir DIR` | `run` writes each shard's parsed artifact under `DIR`. |
-| `--artifact-store DIR` | `run` uploads finished artifacts to this fake store. |
+| `--artifact-store DIR` | `run` uploads finished artifacts to this fake store, one per shard under `DIR/<node>/`. |
 | `--job-resources gpu=BOOL,memory=SZ` | Resource request the job asks for. |
 | `--node-capacity gpu=BOOL,mem=SZ` | Capacities the fake nodes advertise. |
