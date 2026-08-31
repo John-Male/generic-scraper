@@ -81,9 +81,21 @@ class FakeArtifactStore:
         self.uploaded.append(name)
 
 
-DEFAULT_NODES: tuple[NodeCapacity, ...] = tuple(
-    NodeCapacity(name=f"node-{i}", gpu=False, memory_gb=8.0) for i in range(8)
-)
+DEFAULT_NODE_COUNT = 8
+
+
+def homogeneous_nodes(
+    *, gpu: bool = False, memory_gb: float = 8.0, count: int = DEFAULT_NODE_COUNT
+) -> tuple[NodeCapacity, ...]:
+    """A pool of ``count`` identical worker nodes named ``node-0`` upward."""
+
+    return tuple(
+        NodeCapacity(name=f"node-{i}", gpu=gpu, memory_gb=memory_gb)
+        for i in range(count)
+    )
+
+
+DEFAULT_NODES: tuple[NodeCapacity, ...] = homogeneous_nodes()
 
 
 @dataclass

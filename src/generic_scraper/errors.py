@@ -19,10 +19,6 @@ class UnsupportedProcessingTypeError(ScraperError):
     """The configured ``processing_type`` is not a name this package knows."""
 
 
-class EngineUnavailableError(ScraperError):
-    """A requested engine is known but cannot run on this worker node."""
-
-
 class NoEngineAvailableError(ScraperError):
     """Every engine in the fallback chain was tried and none could start."""
 

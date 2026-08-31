@@ -21,11 +21,11 @@ from generic_scraper.config import ScraperType
 from generic_scraper.engines.fake_platform import FakePlatform
 from generic_scraper.errors import ScraperError
 from generic_scraper.orchestrator import (
-    DEFAULT_NODES,
     FakeArtifactStore,
     FakeOrchestrator,
     NodeCapacity,
     ResourceRequest,
+    homogeneous_nodes,
     parse_memory_gb,
 )
 from generic_scraper.scraper import Scraper
@@ -104,24 +104,17 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     artifact_dir = Path(args.artifact_dir) if args.artifact_dir else None
     page_html = Path(args.fixture).read_text() if args.fixture else ""
 
-    def produce(index: int, node: str) -> str:
-        name = f"{node}/parsed_result.json"
+    def produce(_index: int, node: str) -> str:
         if artifact_dir is not None:
-            target = artifact_dir / node / "parsed_result.json"
-            target.parent.mkdir(parents=True, exist_ok=True)
-            summary = _shard_summary(config, args.url, page_html)
-            target.write_text(json.dumps(summary, sort_keys=True))
-        return name
+            _write_shard_summary(artifact_dir / node, config, args.url, page_html)
+        return f"{node}/parsed_result.json"
 
     result = orchestrator.schedule(
         shards=args.shards, resources=resources, produce=produce
     )
 
     if args.artifact_store:
-        store_dir = Path(args.artifact_store)
-        store_dir.mkdir(parents=True, exist_ok=True)
-        for name in result.uploaded:
-            (store_dir / Path(name).name).write_text("uploaded\n")
+        _publish_uploads(Path(args.artifact_store), result.uploaded)
 
     return {
         "shards": result.shards,
@@ -160,6 +153,21 @@ def _shard_summary(config: ScraperType, url: str, page_html: str) -> dict[str, o
     }
 
 
+def _write_shard_summary(
+    node_dir: Path, config: ScraperType, url: str, page_html: str
+) -> None:
+    target = node_dir / "parsed_result.json"
+    target.parent.mkdir(parents=True, exist_ok=True)
+    summary = _shard_summary(config, url, page_html)
+    target.write_text(json.dumps(summary, sort_keys=True))
+
+
+def _publish_uploads(store_dir: Path, names: Sequence[str]) -> None:
+    store_dir.mkdir(parents=True, exist_ok=True)
+    for name in names:
+        (store_dir / Path(name).name).write_text("uploaded\n")
+
+
 def _load_config(path: str | None) -> ScraperType:
     if not path:
         return ScraperType.from_dict({})
@@ -192,12 +200,11 @@ def _as_bool(text: str, *, default: bool = False) -> bool:
 
 def _parse_nodes(text: str | None) -> tuple[NodeCapacity, ...]:
     if not text:
-        return DEFAULT_NODES
+        return homogeneous_nodes()
     fields = _parse_kv(text)
-    gpu = _as_bool(fields.get("gpu", ""))
-    memory_gb = parse_memory_gb(fields.get("mem", fields.get("memory", "8GB")))
-    return tuple(
-        NodeCapacity(name=f"node-{i}", gpu=gpu, memory_gb=memory_gb) for i in range(8)
+    return homogeneous_nodes(
+        gpu=_as_bool(fields.get("gpu", "")),
+        memory_gb=parse_memory_gb(fields.get("mem", fields.get("memory", "8GB"))),
     )
 
 
