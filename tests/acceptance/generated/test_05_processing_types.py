@@ -7,6 +7,7 @@ import pytest
 
 from tests.acceptance.runtime import iter_executions, run_execution
 
+
 IR = {
     "name": "Choose processing type for parsing responses",
     "scenarios": [

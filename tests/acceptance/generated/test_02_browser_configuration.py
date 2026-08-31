@@ -7,6 +7,7 @@ import pytest
 
 from tests.acceptance.runtime import iter_executions, run_execution
 
+
 IR = {
     "name": "Configure browser type for browser-based scraping engines",
     "scenarios": [
