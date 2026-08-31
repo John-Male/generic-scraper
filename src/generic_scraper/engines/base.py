@@ -16,7 +16,6 @@ PLAYWRIGHT = "playwright"
 SELENIUM = "selenium"
 
 KNOWN_ENGINES = (REQUESTS, PLAYWRIGHT, SELENIUM)
-BROWSER_ENGINES = (PLAYWRIGHT, SELENIUM)
 
 
 @dataclass(frozen=True)
@@ -46,4 +45,19 @@ class Engine(Protocol):
 
     def fetch(self, request: FetchRequest) -> RawResponse:
         """Fetch ``request.url`` and return the raw response."""
+        ...
+
+
+@runtime_checkable
+class RenderingEngine(Engine, Protocol):
+    """An :class:`Engine` that drives a browser and remembers which it launched.
+
+    High-level policy uses this narrow interface to ask an engine whether it
+    renders in a browser, instead of importing a concrete browser adapter.
+    """
+
+    launched_browser: str | None
+
+    def start(self, proxy: str | None = None) -> None:
+        """Launch the browser if it is not already running."""
         ...

@@ -10,8 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from generic_scraper.config import ScraperType
-from generic_scraper.engines.base import BROWSER_ENGINES, Engine, FetchRequest
-from generic_scraper.engines.browser_engine import BrowserEngine
+from generic_scraper.engines.base import Engine, FetchRequest, RenderingEngine
 from generic_scraper.engines.platform import EnginePlatform, resolve_engine
 from generic_scraper.errors import ScraperError
 from generic_scraper.parsers.base import Document, Parser
@@ -58,7 +57,7 @@ class Scraper:
     def initialize(self) -> Scraper:
         resolved = resolve_engine(self._config, self._platform)
         engine = resolved.engine
-        if isinstance(engine, BrowserEngine) and engine.launched_browser is None:
+        if isinstance(engine, RenderingEngine) and engine.launched_browser is None:
             engine.start(self._config.proxy_endpoint)
         self._engine = engine
         self._chain = resolved.chain
@@ -83,7 +82,7 @@ class Scraper:
     @property
     def launched_browser(self) -> str | None:
         engine = self._require_engine()
-        return getattr(engine, "launched_browser", None)
+        return engine.launched_browser if isinstance(engine, RenderingEngine) else None
 
     @property
     def request_headers(self) -> dict[str, str]:
@@ -93,11 +92,10 @@ class Scraper:
     def plan(self) -> ScraperPlan:
         cfg = self._config
         header = cfg.proxy_header
-        browser = self.launched_browser if self.engine_name in BROWSER_ENGINES else None
         return ScraperPlan(
             requested_engine=cfg.scraper_engine,
             engine=self.engine_name,
-            browser=browser,
+            browser=self.launched_browser,
             processor=self.parser_name,
             proxy=cfg.proxy_endpoint,
             proxy_header=f"{header[0]}: {header[1]}" if header else None,
