@@ -8,3 +8,22 @@ A quick test to see how SwarmForge works to create a generic scraper. The Sonnet
 Next I will going to run a similar test using the four-pack with the same model to compare the differences in the outcomes
 
 I am quite impressed with the quality of the code that has been generated so far, I have not attempted to use the code yet
+
+## actual text used to create feature gerkhins in copilot using Think Deeper
+```
+create gerkin scripts to describe a python generic scraper that will be able to use number of different scraping techniques the main class for the Scraper will be able to receive
+
+
+ScraperType class
+initScraper class consists of variables:
+- Scraper type, which can be the defaults
+- Requests
+- Playwright
+- Selenium
+- Browser type
+- Default none
+- Secondary choices
+- Chrome
+
+Firefox, then proxy, proxy information, pass key for that header data, create processing type. Values can be like beautiful soup, common requests.
+```
