@@ -1,0 +1,32 @@
+{
+  "name" : "Initialize Scraper with chosen scraping engine",
+  "scenarios" : [ {
+    "name" : "Initialize Scraper with different engines",
+    "steps" : [ {
+      "keyword" : "Given",
+      "text" : "I have a ScraperType configuration with \"scraper_engine\" set to \"<engine>\"",
+      "parameters" : [ "engine" ]
+    }, {
+      "keyword" : "When",
+      "text" : "I initialize the Scraper"
+    }, {
+      "keyword" : "Then",
+      "text" : "the Scraper should use the \"<engine>\" engine",
+      "parameters" : [ "engine" ]
+    }, {
+      "keyword" : "And",
+      "text" : "the Scraper should be ready to fetch pages"
+    } ],
+    "examples" : [ {
+      "engine" : "requests"
+    }, {
+      "engine" : "playwright"
+    }, {
+      "engine" : "selenium"
+    } ]
+  } ],
+  "background" : [ {
+    "keyword" : "Given",
+    "text" : "default scraper configuration exists"
+  } ]
+}

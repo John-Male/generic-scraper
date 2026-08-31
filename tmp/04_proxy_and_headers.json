@@ -1,0 +1,30 @@
+{
+  "name" : "Proxy configuration and header pass key",
+  "scenarios" : [ {
+    "name" : "Initialize Scraper with proxy settings",
+    "steps" : [ {
+      "keyword" : "Given",
+      "text" : "I have a ScraperType configuration with:"
+    }, {
+      "keyword" : "When",
+      "text" : "I initialize the Scraper on a worker node"
+    }, {
+      "keyword" : "Then",
+      "text" : "the Scraper should configure the HTTP client to use the proxy \"http://proxy.example:8080\""
+    } ],
+    "examples" : [ ]
+  }, {
+    "name" : "Include pass key header when provided",
+    "steps" : [ {
+      "keyword" : "Given",
+      "text" : "I have a ScraperType configuration with:"
+    }, {
+      "keyword" : "When",
+      "text" : "I initialize the Scraper"
+    }, {
+      "keyword" : "Then",
+      "text" : "the Scraper should include header \"X-Proxy-Auth: secret-token-123\" on proxied requests"
+    } ],
+    "examples" : [ ]
+  } ]
+}

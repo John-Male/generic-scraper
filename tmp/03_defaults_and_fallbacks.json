@@ -1,0 +1,36 @@
+{
+  "name" : "Default and secondary choices for ScraperType",
+  "scenarios" : [ {
+    "name" : "Use default values when none provided",
+    "steps" : [ {
+      "keyword" : "Given",
+      "text" : "I have an empty ScraperType configuration"
+    }, {
+      "keyword" : "When",
+      "text" : "I initialize the Scraper"
+    }, {
+      "keyword" : "Then",
+      "text" : "the Scraper should use \"requests\" as the default scraper engine"
+    }, {
+      "keyword" : "And",
+      "text" : "the Scraper should have no browser configured"
+    } ],
+    "examples" : [ ]
+  }, {
+    "name" : "Use secondary choice when primary unavailable",
+    "steps" : [ {
+      "keyword" : "Given",
+      "text" : "I have a ScraperType configuration with \"scraper_engine\" set to \"playwright\""
+    }, {
+      "keyword" : "And",
+      "text" : "Playwright is not available on the worker node"
+    }, {
+      "keyword" : "When",
+      "text" : "I initialize the Scraper"
+    }, {
+      "keyword" : "Then",
+      "text" : "the Scraper should fall back to \"requests\""
+    } ],
+    "examples" : [ ]
+  } ]
+}

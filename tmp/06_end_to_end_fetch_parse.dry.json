@@ -1,0 +1,33 @@
+{
+  "schema_version" : 1,
+  "feature_name" : "End-to-end fetch and parse using configured options",
+  "summary" : {
+    "step_occurrences" : 6,
+    "unique_steps" : 6,
+    "findings" : 1
+  },
+  "findings" : [ {
+    "kind" : "possible-synonym",
+    "confidence" : "medium",
+    "members" : [ {
+      "text" : "I fetch \"https://example.com/test-page\"",
+      "locations" : [ {
+        "section" : "scenario",
+        "scenario_index" : 0,
+        "scenario_name" : "Fetch and parse using engine and processor",
+        "step_index" : 2,
+        "keyword" : "And"
+      } ]
+    }, {
+      "text" : "a test URL \"https://example.com/test-page\"",
+      "locations" : [ {
+        "section" : "background",
+        "step_index" : 0,
+        "keyword" : "Given"
+      } ]
+    } ],
+    "reason" : "step texts share many non-placeholder tokens and may describe the same concept",
+    "suggested_action" : "Review manually before editing; normalize the Gherkin only when the different wording is accidental drift.",
+    "score" : 0.714
+  } ]
+}

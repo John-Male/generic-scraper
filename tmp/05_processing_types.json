@@ -1,0 +1,27 @@
+{
+  "name" : "Choose processing type for parsing responses",
+  "scenarios" : [ {
+    "name" : "Initialize Scraper with different processing types",
+    "steps" : [ {
+      "keyword" : "Given",
+      "text" : "I have a ScraperType configuration with \"processing_type\" set to \"<processor>\"",
+      "parameters" : [ "processor" ]
+    }, {
+      "keyword" : "When",
+      "text" : "I initialize the Scraper"
+    }, {
+      "keyword" : "Then",
+      "text" : "the Scraper should use \"<processor>\" to parse HTML responses",
+      "parameters" : [ "processor" ]
+    } ],
+    "examples" : [ {
+      "processor" : "beautifulsoup"
+    }, {
+      "processor" : "lxml"
+    }, {
+      "processor" : "html.parser"
+    }, {
+      "processor" : "regex"
+    } ]
+  } ]
+}

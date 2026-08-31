@@ -1,0 +1,35 @@
+{
+  "schema_version" : 1,
+  "feature_name" : "Distributed execution, artifact upload, and node affinity",
+  "summary" : {
+    "step_occurrences" : 12,
+    "unique_steps" : 12,
+    "findings" : 1
+  },
+  "findings" : [ {
+    "kind" : "possible-synonym",
+    "confidence" : "medium",
+    "members" : [ {
+      "text" : "the Swarm Forge orchestrator schedules the job",
+      "locations" : [ {
+        "section" : "scenario",
+        "scenario_index" : 0,
+        "scenario_name" : "Run scraping job across multiple workers",
+        "step_index" : 2,
+        "keyword" : "When"
+      } ]
+    }, {
+      "text" : "the orchestrator schedules the job",
+      "locations" : [ {
+        "section" : "scenario",
+        "scenario_index" : 2,
+        "scenario_name" : "Respect node affinity and resource limits",
+        "step_index" : 2,
+        "keyword" : "When"
+      } ]
+    } ],
+    "reason" : "step texts share many non-placeholder tokens and may describe the same concept",
+    "suggested_action" : "Review manually before editing; normalize the Gherkin only when the different wording is accidental drift.",
+    "score" : 0.6
+  } ]
+}

@@ -1,0 +1,52 @@
+{
+  "name" : "Error handling, retries, and fallback behavior",
+  "scenarios" : [ {
+    "name" : "Retry on transient network error",
+    "steps" : [ {
+      "keyword" : "Given",
+      "text" : "I have a ScraperType configuration with \"scraper_engine\" set to \"requests\""
+    }, {
+      "keyword" : "And",
+      "text" : "retry policy set to 3 attempts with exponential backoff"
+    }, {
+      "keyword" : "When",
+      "text" : "a transient network error occurs during fetch"
+    }, {
+      "keyword" : "Then",
+      "text" : "the Scraper should retry up to 3 times before failing"
+    } ],
+    "examples" : [ ]
+  }, {
+    "name" : "Fallback to secondary engine on engine failure",
+    "steps" : [ {
+      "keyword" : "Given",
+      "text" : "I have a ScraperType configuration with:"
+    }, {
+      "keyword" : "And",
+      "text" : "Selenium fails to start on the worker"
+    }, {
+      "keyword" : "When",
+      "text" : "I initialize the Scraper"
+    }, {
+      "keyword" : "Then",
+      "text" : "the Scraper should attempt to use \"requests\" as the secondary engine"
+    }, {
+      "keyword" : "And",
+      "text" : "the initialization should succeed"
+    } ],
+    "examples" : [ ]
+  }, {
+    "name" : "Fail with descriptive error when no engine available",
+    "steps" : [ {
+      "keyword" : "Given",
+      "text" : "I have a ScraperType configuration with:"
+    }, {
+      "keyword" : "When",
+      "text" : "I initialize the Scraper"
+    }, {
+      "keyword" : "Then",
+      "text" : "the Scraper initialization should fail with \"UnsupportedScraperEngineError\""
+    } ],
+    "examples" : [ ]
+  } ]
+}

@@ -1,0 +1,40 @@
+{
+  "name" : "End-to-end fetch and parse using configured options",
+  "scenarios" : [ {
+    "name" : "Fetch and parse using engine and processor",
+    "steps" : [ {
+      "keyword" : "Given",
+      "text" : "I have a ScraperType configuration with:"
+    }, {
+      "keyword" : "When",
+      "text" : "I initialize the Scraper on a worker node"
+    }, {
+      "keyword" : "And",
+      "text" : "I fetch \"https://example.com/test-page\""
+    }, {
+      "keyword" : "Then",
+      "text" : "the Scraper should return a parsed document using \"<processor>\"",
+      "parameters" : [ "processor" ]
+    }, {
+      "keyword" : "And",
+      "text" : "the parsed document should contain the page title"
+    } ],
+    "examples" : [ {
+      "engine" : "requests",
+      "processor" : "beautifulsoup"
+    }, {
+      "engine" : "requests",
+      "processor" : "lxml"
+    }, {
+      "engine" : "selenium",
+      "processor" : "beautifulsoup"
+    }, {
+      "engine" : "playwright",
+      "processor" : "html.parser"
+    } ]
+  } ],
+  "background" : [ {
+    "keyword" : "Given",
+    "text" : "a test URL \"https://example.com/test-page\""
+  } ]
+}

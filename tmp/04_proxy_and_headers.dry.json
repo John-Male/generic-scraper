@@ -1,0 +1,33 @@
+{
+  "schema_version" : 1,
+  "feature_name" : "Proxy configuration and header pass key",
+  "summary" : {
+    "step_occurrences" : 6,
+    "unique_steps" : 5,
+    "findings" : 1
+  },
+  "findings" : [ {
+    "kind" : "exact-duplicate",
+    "confidence" : "high",
+    "canonical_candidate" : "I have a ScraperType configuration with:",
+    "pattern_candidate" : "^I have a ScraperType configuration with:$",
+    "members" : [ {
+      "text" : "I have a ScraperType configuration with:",
+      "locations" : [ {
+        "section" : "scenario",
+        "scenario_index" : 0,
+        "scenario_name" : "Initialize Scraper with proxy settings",
+        "step_index" : 0,
+        "keyword" : "Given"
+      }, {
+        "section" : "scenario",
+        "scenario_index" : 1,
+        "scenario_name" : "Include pass key header when provided",
+        "step_index" : 0,
+        "keyword" : "Given"
+      } ]
+    } ],
+    "reason" : "same step text appears more than once in the IR",
+    "suggested_action" : "Treat this as a vocabulary reuse audit; repeated use across scenarios is usually acceptable."
+  } ]
+}

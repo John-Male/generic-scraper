@@ -1,0 +1,14 @@
+Specifier is idle: ready_for_next.sh returns NO_TASK, there is no card in
+.swarmforge/board/tasks.tsv, and no tasks/<name>.md operator-intent document
+exists. Nothing upstream feeds the specifier, so I have no task name to carry
+on the git_handoff to coder.
+
+I am ready to run the full spec pass over features/01..08 in build order:
+review and normalize each .feature to the APS Gherkin subset (the current
+files use tags and step-attached data tables, which the parser does not
+support), prune non-behavioral example columns, consolidate setup into
+Background, run ir-dry-checker, write an end-to-end QA suite per feature,
+then commit and hand off to coder as ONE handoff for the whole folder.
+
+Please create the task card (and tasks/<name>.md if you use one) so I have a
+stable task name, or reply with the task name to use and I will proceed.

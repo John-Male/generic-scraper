@@ -1,0 +1,56 @@
+{
+  "schema_version" : 1,
+  "feature_name" : "Error handling, retries, and fallback behavior",
+  "summary" : {
+    "step_occurrences" : 12,
+    "unique_steps" : 10,
+    "findings" : 2
+  },
+  "findings" : [ {
+    "kind" : "exact-duplicate",
+    "confidence" : "high",
+    "canonical_candidate" : "I have a ScraperType configuration with:",
+    "pattern_candidate" : "^I have a ScraperType configuration with:$",
+    "members" : [ {
+      "text" : "I have a ScraperType configuration with:",
+      "locations" : [ {
+        "section" : "scenario",
+        "scenario_index" : 1,
+        "scenario_name" : "Fallback to secondary engine on engine failure",
+        "step_index" : 0,
+        "keyword" : "Given"
+      }, {
+        "section" : "scenario",
+        "scenario_index" : 2,
+        "scenario_name" : "Fail with descriptive error when no engine available",
+        "step_index" : 0,
+        "keyword" : "Given"
+      } ]
+    } ],
+    "reason" : "same step text appears more than once in the IR",
+    "suggested_action" : "Treat this as a vocabulary reuse audit; repeated use across scenarios is usually acceptable."
+  }, {
+    "kind" : "exact-duplicate",
+    "confidence" : "high",
+    "canonical_candidate" : "I initialize the Scraper",
+    "pattern_candidate" : "^I initialize the Scraper$",
+    "members" : [ {
+      "text" : "I initialize the Scraper",
+      "locations" : [ {
+        "section" : "scenario",
+        "scenario_index" : 1,
+        "scenario_name" : "Fallback to secondary engine on engine failure",
+        "step_index" : 2,
+        "keyword" : "When"
+      }, {
+        "section" : "scenario",
+        "scenario_index" : 2,
+        "scenario_name" : "Fail with descriptive error when no engine available",
+        "step_index" : 1,
+        "keyword" : "When"
+      } ]
+    } ],
+    "reason" : "same step text appears more than once in the IR",
+    "suggested_action" : "Treat this as a vocabulary reuse audit; repeated use across scenarios is usually acceptable."
+  } ]
+}

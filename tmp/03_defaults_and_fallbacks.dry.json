@@ -1,0 +1,33 @@
+{
+  "schema_version" : 1,
+  "feature_name" : "Default and secondary choices for ScraperType",
+  "summary" : {
+    "step_occurrences" : 8,
+    "unique_steps" : 7,
+    "findings" : 1
+  },
+  "findings" : [ {
+    "kind" : "exact-duplicate",
+    "confidence" : "high",
+    "canonical_candidate" : "I initialize the Scraper",
+    "pattern_candidate" : "^I initialize the Scraper$",
+    "members" : [ {
+      "text" : "I initialize the Scraper",
+      "locations" : [ {
+        "section" : "scenario",
+        "scenario_index" : 0,
+        "scenario_name" : "Use default values when none provided",
+        "step_index" : 1,
+        "keyword" : "When"
+      }, {
+        "section" : "scenario",
+        "scenario_index" : 1,
+        "scenario_name" : "Use secondary choice when primary unavailable",
+        "step_index" : 2,
+        "keyword" : "When"
+      } ]
+    } ],
+    "reason" : "same step text appears more than once in the IR",
+    "suggested_action" : "Treat this as a vocabulary reuse audit; repeated use across scenarios is usually acceptable."
+  } ]
+}
