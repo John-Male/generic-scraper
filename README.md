@@ -27,3 +27,11 @@ initScraper class consists of variables:
 
 Firefox, then proxy, proxy information, pass key for that header data, create processing type. Values can be like beautiful soup, common requests.
 ```
+## claude session comments on using Sonnet 5
+Sonnet 5 is the default model for my cli login
+
+```
+That's the more interesting option than switching all six: the roles have genuinely different demands. The specifier writes the spec everything downstream depends on, and the architect and hardender do the reasoning-heavy review — those are where a stronger model pays. The coder implementing a named scenario and the cleaner removing duplication are well within Sonnet's range, and they're also the highest-volume roles, so leaving them on Sonnet keeps the usage burn down.
+
+Worth weighing against the fact that six concurrent sessions already consume quota fast; putting all six on Opus would multiply that. Restart the swarm after editing the config — the launch command is built at startup.
+```
